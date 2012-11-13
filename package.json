@@ -1,0 +1,21 @@
+{
+  "author": "Chris Dew <chris.dew@barricane.com> (http://www.chrisdew.com)",
+  "name": "subsql",
+  "description": "An SQL Database with Subscribed Queries",
+  "version": "0.0.2",
+  "homepage": "https://github.com/chrisdew/subsql",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/chrisdew/subsql.git"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "optionalDependencies": {},
+  "engines": {
+    "node": "*"
+  }
+}
