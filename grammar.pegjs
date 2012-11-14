@@ -11,8 +11,11 @@ CreateLines
       return result; }
 
 CreateLine
-  = field:Identifier _ type:FieldType pk:(_ "primary key")? ai:(_ "auto_increment")
-    { return {field:field, type:type, pk:pk?true:undefined, ai:ai?true:undefined}; }
+  = field:Identifier _ type:FieldType pk:(_ "primary key")? ai:(_ "auto_increment")?
+    { var result = {field:field, type:type};
+      if (pk) result.pk = true;
+      if (ai) result.ai = true;
+      return result; }
 
 FieldType
   = "integer"
@@ -51,7 +54,7 @@ _
     { return undefined; }
 
 WhiteSpace "whitespace"
-  = [ \t\v\f]
+  = [ \t\v\f\n\r]
 
 LineTerminator
   = [\n\r]
