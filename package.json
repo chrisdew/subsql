@@ -15,7 +15,8 @@
   "dependencies": {
     "express": "~3.0.3",
     "telnet": "0.0.1",
-    "pegjs": "0.7.0"
+    "pegjs": "0.7.0",
+    "jscoverage": "~0.2.5"
   },
   "devDependencies": {
     "mocha": "~1.7.0"

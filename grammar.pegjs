@@ -1,9 +1,57 @@
+
 start 
   = "select" el:ExprList fc:FromClause?
     { return {select:{exprs:el,from:fc}}; }
-  / "create" _ "table" _ TableName _? "(" lines:CreateLines _? ")" 
+  / "subscribe" el:ExprList fc:FromClause?
+    { return {subscribe:{exprs:el,from:fc}}; }
+  / "create" _ "table" _ TableName _? "(" _? lines:CreateLines _? ")" 
     { return {createTable:lines}; }
+  / "use" _ DatabaseName
+  / "create" _ DatabaseName
+  / "insert into" _ tn:TableName _? "(" _? fields:FieldList _? ")" _? "values" _? "(" _? values:ValueList ")"
+    { return {insert:{table:tn,fields:fields,values:values}}; }
+  / "update" _ tn:TableName _ "set" _ sl:SetList _ wc:WhereClause
+    { return {update:{table:tn,set:sl,where:wc}}; }
+  
+SetList
+  = head:SetPair tail:( _? "," _? SetPair)*
+    { var result = [head];
+      for (var i in tail) result.push(tail[i][3]);
+      return result; }
+      
+SetPair
+  = f:FieldName _? "=" _? e:Expr
+    { return {field:f,expr:e}; }
+    
+WhereClause
+  = "where" _? e:Expr
+    { return e; }
+    
+FieldList
+  = head:FieldName tail:( _? "," _? FieldName)* 
+    { var result = [head];
+      for (var i in tail) result.push(tail[i][3]);
+      return result; }
+  
+ValueList
+  = head:Value tail:( _? "," _? Value)* 
+    { var result = [head];
+      for (var i in tail) result.push(tail[i][3]);
+      return result; }
+  
+Value
+  = Integer
+  / String
+  
+Integer
+  = value:([1-9][0-9]*) { return parseInt(value, 10); }
+  
+String
+  = "\"" value:([a-z]*) "\"" { return value.join(''); }
 
+DatabaseName
+  = Identifier
+  
 CreateLines
   = _? head:CreateLine tail:( _? "," _? CreateLine)* 
     { var result = [head];
@@ -20,6 +68,7 @@ CreateLine
 FieldType
   = "integer"
   / "varchar"
+  / "datetime"
 
 
 ExprList
@@ -29,7 +78,10 @@ ExprList
       return result; }
 
 Expr
-  = Identifier
+  = f:FieldName _? "=" _? v:Value
+    { return {expr:{op:"=",field:f,value:v}}; }
+  / Identifier
+  / Value
 
 FieldName
   = Identifier
@@ -54,7 +106,7 @@ _
     { return undefined; }
 
 WhiteSpace "whitespace"
-  = [ \t\v\f\n\r]
+  = [ \t\v\f\n\r]+
 
 LineTerminator
   = [\n\r]
