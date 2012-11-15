@@ -8,7 +8,7 @@ describe('grammar', function() {
     assert.deepEqual({"select":{"exprs":["id","foo"],"from":["bar"]}}, parser.parse('select id, foo from bar'));
   });
   it('create table bar (id integer primary key auto_increment, foo varchar)', function() {
-    assert.deepEqual({"createTable":[{"field":"id","type":"integer","pk":true,"ai":true},{"field":"foo","type":"varchar"}]},
+    assert.deepEqual({"createTable":{fields:[{"field":"id","type":"integer","pk":true,"ai":true},{"field":"foo","type":"varchar"}]}},
                      parser.parse('create table bar (id integer primary key auto_increment, foo varchar)'));
   });
   it('insert into bar (id, foo) values (1, "hello")', function() {

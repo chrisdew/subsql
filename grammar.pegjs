@@ -5,7 +5,7 @@ start
   / "subscribe" el:ExprList fc:FromClause?
     { return {subscribe:{exprs:el,from:fc}}; }
   / "create" _ "table" _ TableName _? "(" _? lines:CreateLines _? ")" 
-    { return {createTable:lines}; }
+    { return {createTable:{fields:lines}}; }
   / "use" _ DatabaseName
   / "create" _ DatabaseName
   / "insert into" _ tn:TableName _? "(" _? fields:FieldList _? ")" _? "values" _? "(" _? values:ValueList ")"
