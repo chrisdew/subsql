@@ -10,7 +10,7 @@ describe('Session', function() {
     assert.equal("hello session", session.hello());
   });
   it('should create an instance"', function() {
-    assert.deepEqual({}, new session.Session(db));
+    assert.deepEqual("Session", new session.Session(db).constructor.name);
   });
   it('should be an instance of event emitter', function() {
     assert.deepEqual("EventEmitter",
@@ -21,7 +21,7 @@ describe('Session', function() {
   });
   var sess = new session.Session(db);
   it('should return an error when executing nonsense', function() {
-    assert.deepEqual('Syntax error: Expected ",", "=" or "from" but "s" found.\nselect three sheep from a field\n             ^...', sess.exec('select three sheep from a field'));
+    assert.deepEqual('             ^\nSyntax error: Expected ",", "=" or "from" but "s" found.', sess.exec('select three sheep from a field'));
   });
 });
 
