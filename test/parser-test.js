@@ -2,7 +2,7 @@ var assert = require("assert")
 
 var peg = require('pegjs');
 var fs = require('fs');
-var parser = peg.buildParser(fs.readFileSync('grammar.pegjs', 'utf8'));
+var parser = peg.buildParser(fs.readFileSync('lib/grammar.pegjs', 'utf8'));
 describe('grammar', function() {
   it('select id, foo from bar', function() {
     assert.deepEqual({"select":{"exprs":["id","foo"],"from":["bar"]}}, parser.parse('select id, foo from bar'));

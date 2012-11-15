@@ -4,10 +4,12 @@ var telnet = require('telnet')
   , port = Number(process.argv[2]) || 2323
   , readline = require('readline')
   , net = require('net')
+  , database = require('lib/database')
   ;
   
 
 var server = telnet.createServer(function (client) {
+  var db = new database.Database();
 
   client.on('window size', function (e) {
     if (e.command === 'sb') {
@@ -38,6 +40,7 @@ var server = telnet.createServer(function (client) {
   // emit 'window size' events
   client.do.window_size()
 
+  session = new Session(db);
 
   client.write('\nWelcome to the Proof of Concept SubSQL server, v0.0.2.\n\n');
   var rl = readline.createInterface({
@@ -50,10 +53,10 @@ var server = telnet.createServer(function (client) {
   rl.prompt();
 
   rl.on('line', function(line) {
-    client.write('echoing ' + line);
+    client.write(session.exec(line));
     rl.prompt();
   }).on('close', function() {
-    console.log('bye bye');
+    session.close();
   });
 })
 
