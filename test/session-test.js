@@ -19,9 +19,25 @@ describe('Session', function() {
   it('should return an empty string when executing no input', function() {
     assert.deepEqual('', new session.Session(db).exec(''));
   });
+  
   var sess = new session.Session(db);
-  it('should return an error when executing nonsense', function() {
-    assert.deepEqual('             ^\nSyntax error: Expected ",", "=" or "from" but "s" found.', sess.exec('select three sheep from a field'));
+  it('should event an error when executing nonsense', function(done) {
+    sess.exec('select three sheep from a field', function(err, res) {
+      assert.equal('             ^\nSyntax error: Expected ",", "=" or "from" but "s" found.',
+                   err);
+      done();
+    });
   });
+  
+  var sess2 = new session.Session(db);
+  it('should create a table', function(done) {
+    sess2.exec('create table bar (id integer primary key, foo varchar)', function(err, res) {
+      //console.log('on res', res);
+      assert.equal('Table created.',
+                   res);
+      done();
+    });
+  });
+  
 });
 
