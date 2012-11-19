@@ -53,11 +53,11 @@ var server = telnet.createServer(function (client) {
   rl.setPrompt('SubSQL> ');
   rl.prompt();
 
-
-  session.on('error', function(message) { client.write(message + '\n'); rl.prompt(); });
-  session.on('result', function(message) { client.write(message + '\n'); rl.prompt(); });
   rl.on('line', function(line) {
-    return session.exec(line);
+    return session.exec(line, function(err, res) {
+      if (err) { client.write(err + '\n'); rl.prompt(); }
+      if (res) { client.write(res + '\n'); rl.prompt(); }
+    });
   }).on('close', function() {
     session.close();
   });
