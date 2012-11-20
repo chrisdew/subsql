@@ -38,6 +38,12 @@ describe('Session', function() {
       done();
     });
   });
+  it('should insert a row', function(done) {
+    sess2.exec('insert into bar (id, foo) values (1, "hello")', function(err, res) {
+      assert.equal('1 row inserted.', res);
+      done();
+    });
+  });
   
 });
 

@@ -12,5 +12,20 @@ describe('Table', function() {
     assert.deepEqual("EventEmitter",
                      new table.Table().constructor.super_.name);
   });
+  
+  it('should insert a record', function() {
+    var bar = new table.Table({name:'bar',
+                               fields:[{field:'id',type:'integer',pk:true,ai:true},
+                                       {field:'foo',type: 'varchar'}]});
+    bar.insert({"table":"bar","fields":["id","foo"],"values":[1,"hello"]});
+    //console.log("bar", bar);
+    assert.deepEqual({name:'bar',
+                      fields:[{field:'id',type:'integer',pk:true,ai:true},
+                              {field:'foo',type:'varchar'}],
+                      rowsByPk:{'1':{id:1,foo:'hello',_version:1}},
+                      pkName:'id',
+                      nextPk:2},
+                     bar);
+  });
 });
 

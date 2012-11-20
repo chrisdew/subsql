@@ -12,21 +12,36 @@ describe('Database', function() {
     assert.deepEqual("EventEmitter",
                      new database.Database().constructor.super_.name);
   });
+  
+  var db = new database.Database();
   it('should create a table called mytable', function() {
     assert.deepEqual( { tablesByName: { mytable: { name: "mytable"
                                                  , fields: [ { field: "id", type: "integer", pk: true, ai: true }
                                                            , { field: "foo", type: "varchar"}
                                                            ]
                                                  , rowsByPk: {}
-                                                 , pkName: null
+                                                 , pkName: 'id'
                                                  , nextPk: 1
                       } } }
-                    , new database.Database().createTable(
+                    , db.createTable(
                       { name:"mytable"
                       , fields:[ { field: 'id', type: 'integer', pk:true, ai:true }
                                , { field: 'foo', type: 'varchar' }
                                ]
                       } ) );
   });
+  it('should add a new row to mytable', function(done) {
+    assert.deepEqual( { tablesByName: { mytable: { name: "mytable"
+                                                 , fields: [ { field: "id", type: "integer", pk: true, ai: true }
+                                                           , { field: "foo", type: "varchar"}
+                                                           ]
+                                                 , rowsByPk: {1: { id: 1, foo: 'hello', _version: 1 } }
+                                                 , pkName: 'id'
+                                                 , nextPk: 2
+                      } } }
+                    , db.insert( {"table":"mytable","fields":["id","foo"],"values":[1,"hello"]}, done));
+  });
+  /*
+  */
 });
 
