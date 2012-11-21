@@ -23,4 +23,8 @@ describe('grammar', function() {
     assert.deepEqual({"select":{"exprs":[423]}},
                      parser.parse('select 423'));
   });
+  it('select 2 + 2', function() {
+    assert.deepEqual({"select":{}},
+                     parser.parse('select 2 + 2'));
+  });
 });
