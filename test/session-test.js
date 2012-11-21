@@ -23,8 +23,11 @@ describe('Session', function() {
   var sess = new session.Session(db);
   it('should event an error when executing nonsense', function(done) {
     sess.exec('select three sheep from a field', function(err, res) {
-      assert.equal('             ^\nSyntax error: Expected "*", "+", ",", "-", "/", "=" or "from" but "s" found.',
+      //console.log("!" + err + "!");
+      assert.equal('             ^\nSyntax error: Expected "*", "+", ",", "-", "/", "<", "<=", "=", ">", ">=" or "from" but "s" found.',
                    err);
+/*
+*/
       done();
     });
   });
