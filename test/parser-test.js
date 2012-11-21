@@ -31,4 +31,16 @@ describe('grammar', function() {
     assert.deepEqual({"select":{"exprs":[{"fn":"sub","args":[2,2]}]}},
                      parser.parse('select 2 - 2'));
   });
+  it('select func()', function() {
+    assert.deepEqual({"select":{"exprs":[{"fn":"func","args":[]}]}},
+                     parser.parse('select func()'));
+  });
+  it('select func(2)', function() {
+    assert.deepEqual({"select":{"exprs":[{"fn":"func","args":[2]}]}},
+                     parser.parse('select func(2)'));
+  });
+  it('select func(func(2+2, 6), 10, foo)', function() {
+    assert.deepEqual({"select":{"exprs":[{"fn":"func","args":[{"fn":"func","args":[{"fn":"add","args":[2,2]},6]},10,"foo"]}]}},
+                     parser.parse('select func(func(2+2, 6), 10, foo)'));
+  });
 });
