@@ -13,19 +13,20 @@ describe('Table', function() {
                      new table.Table().constructor.super_.name);
   });
   
-  it('should insert a record', function() {
+  it('should insert a record', function(done) {
     var bar = new table.Table({name:'bar',
                                fields:[{field:'id',type:'integer',pk:true,ai:true},
                                        {field:'foo',type: 'varchar'}]});
+    bar.on('delta', function(delta) {
+      assert.deepEqual({"op":"insert","row":{"_version":1,"id":1,"foo":"hello"}}, delta);
+      done();
+    });
     bar.insert({"table":"bar","fields":["id","foo"],"values":[1,"hello"]});
-    //console.log("bar", bar);
-    assert.deepEqual({name:'bar',
-                      fields:[{field:'id',type:'integer',pk:true,ai:true},
-                              {field:'foo',type:'varchar'}],
-                      rowsByPk:{'1':{id:1,foo:'hello',_version:1}},
-                      pkName:'id',
-                      nextPk:2},
-                     bar);
+    console.log("bar", bar);
+    assert.deepEqual({'1':{id:1,foo:'hello',_version:1}},
+                     bar.rowsByPk);
+    assert.deepEqual(2,
+                     bar.nextPk);
   });
 });
 
