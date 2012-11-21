@@ -16,7 +16,7 @@ describe('grammar', function() {
                      parser.parse('insert into bar (id, foo) values (1, "hello")'));
   });
   it('update bar set foo="hello" where id = 1', function() {
-    assert.deepEqual({"update":{"table":"bar","set":[{"field":"foo","expr":"hello"}],"where":{"expr":{"op":"=","field":"id","value":1}}}},
+    assert.deepEqual({"update":{"table":"bar","set":[{"field":"foo","expr":"hello"}],"where":{"expr":{"fn":"equal","args":["id",1]}}}},
                      parser.parse('update bar set foo="hello" where id=1'));
   });
   it('select 423', function() {
@@ -24,7 +24,7 @@ describe('grammar', function() {
                      parser.parse('select 423'));
   });
   it('select 2 + 2', function() {
-    assert.deepEqual({"select":{}},
+    assert.deepEqual({"select":{"exprs":[{"fn":"add","args":[2,2]}]}},
                      parser.parse('select 2 + 2'));
   });
 });
