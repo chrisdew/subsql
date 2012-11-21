@@ -27,4 +27,8 @@ describe('grammar', function() {
     assert.deepEqual({"select":{"exprs":[{"fn":"add","args":[2,2]}]}},
                      parser.parse('select 2 + 2'));
   });
+  it('select 2 - 2', function() {
+    assert.deepEqual({"select":{"exprs":[{"fn":"sub","args":[2,2]}]}},
+                     parser.parse('select 2 - 2'));
+  });
 });
