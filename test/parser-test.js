@@ -19,4 +19,8 @@ describe('grammar', function() {
     assert.deepEqual({"update":{"table":"bar","set":[{"field":"foo","expr":"hello"}],"where":{"expr":{"op":"=","field":"id","value":1}}}},
                      parser.parse('update bar set foo="hello" where id=1'));
   });
+  it('select 423', function() {
+    assert.deepEqual({"select":{"exprs":[423]}},
+                     parser.parse('select 423'));
+  });
 });
