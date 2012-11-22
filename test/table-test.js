@@ -43,7 +43,7 @@ describe('Table', function() {
                      bar.nextPk);
   });
     
-  it('sjould update a record', function(done) {
+  it('should update a record', function(done) {
     bar.once('delta', function(delta) {
       assert.deepEqual({"op":"update","table":"bar","pk":"1","set":[{"field":"foo","expr":"hello"}]}, delta);
       done();
@@ -51,5 +51,13 @@ describe('Table', function() {
     bar.update({"table":"bar","set":[{"field":"foo","expr":"hello"}],"where":{"expr":{"fn":"equal","args":[{field:"id"},1]}}});
   }); 
 
+  it('should update a record again', function(done) {
+    bar.once('delta', function(delta) {
+      assert.deepEqual({"op":"update","table":"bar","pk":"1","set":[{"field":"foo","expr":"hello"}]}, delta);
+      done();
+    });
+    bar.update({"table":"bar","set":[{"field":"foo","expr":"world"}],"where":{"expr":{"fn":"equal","args":[{field:"id"},1]}}});
+  });
+  
 });
 
