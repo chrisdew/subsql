@@ -60,4 +60,8 @@ This test takes 25s to run!  All the others take 149ms in total.
     assert.deepEqual({"selectStar":{"from":["bar"],"where":{"expr":{"fn":"and","args":[{"fn":"equal","args":[{"field":"x"},1]},{"fn":"lt","args":[{"field":"y"},{"fn":"now","args":[]}]}]}}}},
                      parser.parse('select * from bar where x = 1 and y < now()'));
   });
+  it('select * from bar where x = 1 and x > 0', function() {
+    assert.deepEqual({"selectStar":{"from":["bar"],"where":{"expr":{"fn":"and","args":[{"fn":"equal","args":[{"field":"x"},1]},{"fn":"gt","args":[{"field":"x"},0]}]}}}},
+                     parser.parse('select * from bar where x = 1 and x > 0'));
+  });
 });
