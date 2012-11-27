@@ -67,5 +67,14 @@ describe('Table', function() {
     bar.update({"table":"bar","set":[{"field":"foo","expr":"world"}],"where":{"expr":{"fn":"equal","args":[1, {field:"id"}]}}});
   });
   
+  it('can handle a deeply nested where clause', function(done) {
+    bar.once('delta', function(delta) {
+      assert.deepEqual({"op":"update","table":"bar","pk":"1","set":[{"field":"foo","expr":"world2"}]}, delta);
+      done();
+    });
+    bar.update({"table":"bar","set":[{"field":"foo","expr":"world2"}],"where":{"expr":{"fn":"and","args":[{"fn":"equal","args":[{"field":"id"},1]},{"fn":"gt","args":[{"field":"id"},0]}]}}});
+    console.log(JSON.stringify(bar));
+  });
+  
 });
 
