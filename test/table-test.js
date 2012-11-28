@@ -76,5 +76,13 @@ describe('Table', function() {
     console.log(JSON.stringify(bar));
   });
   
+  it('should update a using a named function in the where clause', function(done) {
+    bar.once('delta', function(delta) {
+      assert.deepEqual({"op":"update","table":"bar","pk":"1","set":[{"field":"foo","expr":"hello2"}]}, delta);
+      done();
+    });
+    bar.update({"table":"bar","set":[{"field":"foo","expr":"hello2"}],"where":{"expr":{"fn":"equalsOne","args":[{field:"id"}]}}});
+  }); 
+
 });
 
