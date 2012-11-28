@@ -39,6 +39,10 @@ describe('grammar', function() {
     assert.deepEqual({"select":{"exprs":[{"fn":"func","args":[2]}]}},
                      parser.parse('select func(2)'));
   });
+  it('select * from bar', function() {
+    assert.deepEqual({"selectStar":{from:["bar"]}},
+                     parser.parse('select * from bar'));
+  });
 /*
 
 This test takes 25s to run!  All the others take 149ms in total.

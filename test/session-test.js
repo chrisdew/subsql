@@ -47,6 +47,12 @@ describe('Session', function() {
       done();
     });
   });
+  it('should execute a query', function(done) {
+    sess2.exec('select * from bar', function(err, res) {
+      assert.deepEqual([{"_version":1,"id":1,"foo":"hello"}], res);
+      done();
+    });
+  });
   
 });
 
