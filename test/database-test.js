@@ -22,6 +22,7 @@ describe('Database', function() {
                                                  , rowsByPk: {}
                                                  , pkName: 'id'
                                                  , nextPk: 1
+                                                 , ai: true
                       } } }
                     , db.createTable(
                       { name:"mytable"
@@ -38,6 +39,7 @@ describe('Database', function() {
                                                  , rowsByPk: {1: { id: 1, foo: 'hello', _version: 1 } }
                                                  , pkName: 'id'
                                                  , nextPk: 2
+                                                 , ai: true
                       } } }
                     , db.insert( {"table":"mytable","fields":["id","foo"],"values":[1,"hello"]}, done));
   });

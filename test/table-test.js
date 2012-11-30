@@ -6,7 +6,7 @@ describe('Table', function() {
     assert.equal("hello table", table.hello());
   });
   it('should create an instance"', function() {
-    assert.deepEqual({"rowsByPk":{},"pkName":null,"nextPk":1}, new table.Table());
+    assert.deepEqual({"rowsByPk":{},"pkName":null,"nextPk":1,"ai":false}, new table.Table());
   });
   it('should be an instance of event emitter', function() {
     assert.deepEqual("EventEmitter",
