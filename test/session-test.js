@@ -53,6 +53,12 @@ describe('Session', function() {
       done();
     });
   });
+  it('should execute a query with a where clause', function(done) {
+    sess2.exec('select * from bar where id = 0', function(err, res) {
+      assert.deepEqual([], res);
+      done();
+    });
+  });
   
 });
 
