@@ -11,9 +11,17 @@ describe('Session', function() {
     sess.exec('create table events (id integer primary key auto_increment, name varchar, start integer, duration integer)', function(err, res) {
       assert.equal('Table created.', res);
       sess.exec('insert into events (name, start, duration) values ("dentist", 1000, 100)', function(err, res) {
-        console.log("err", err);
         assert.equal('1 row inserted.', res);
-        done();
+        sess.exec('insert into events (name, start, duration) values ("doctor", 3000, 100)', function(err, res) {
+          assert.equal('1 row inserted.', res);
+          sess.exec('insert into events (name, start, duration) values ("accountant", 5000, 100)', function(err, res) {
+            assert.equal('1 row inserted.', res);
+            sess.exec('select * from events where start >= 1000 and start < 4000', function(err, res) {
+              assert.deepEqual([{"_version":1,"name":"dentist","start":1000,"duration":100},{"_version":1,"name":"doctor","start":3000,"duration":100}],res);
+              done();
+            });
+          });
+        });
       });
     });   
   });
