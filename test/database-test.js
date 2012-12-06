@@ -45,5 +45,26 @@ describe('Database', function() {
   });
   /*
   */
+  
+  it('should run a complex pushStar query', function(done) {
+    var query = db.pushStar({"from":["mytable"],"where":{"expr":{"fn":"and","args":[{"fn":"gte","args":[{"field":"id"},1]},{"fn":"lt","args":[{"field":"id"},4]}]}}});
+    var initialised = false;
+    query.once('init', function(data) {
+      console.log("initialised = true");
+      initialised = true;
+      assert.deepEqual([{"_version":1,"id":1,"foo":"hello"}], data);
+      db.insert( {"table":"mytable","fields":["id","foo"],"values":[2,"world"]});
+    });
+    query.on('delta', function(delta) {
+      console.log('delta received');
+      console.log("initilised", initialised);
+      assert(initialised);
+      assert.deepEqual({"op":"insert","table":"mytable","row":{"_version":1,"id":2,"foo":"world"}}, delta);
+      done();
+    });
+    //console.log('query', query.constructor, JSON.stringify(query));
+    
+  });
+    
 });
 

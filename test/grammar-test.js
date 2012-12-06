@@ -68,4 +68,9 @@ This test takes 25s to run!  All the others take 149ms in total.
     assert.deepEqual({"selectStar":{"from":["bar"],"where":{"expr":{"fn":"and","args":[{"fn":"equal","args":[{"field":"x"},1]},{"fn":"gt","args":[{"field":"x"},0]}]}}}},
                      parser.parse('select * from bar where x = 1 and x > 0'));
   });
+  it('push * from events where start >= 1000 and start < 4000', function() {
+    //console.log(JSON.stringify(parser.parse('push * from events where start >= 1000 and start < 4000')));
+    assert.deepEqual({"pushStar":{"from":["events"],"where":{"expr":{"fn":"and","args":[{"fn":"gte","args":[{"field":"start"},1000]},{"fn":"lt","args":[{"field":"start"},4000]}]}}}},
+                     parser.parse('push * from events where start >= 1000 and start < 4000'));
+  });
 });
