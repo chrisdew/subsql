@@ -59,7 +59,7 @@ describe('Database', function() {
       console.log('delta received');
       console.log("initilised", initialised);
       assert(initialised);
-      assert.deepEqual({"op":"insert","table":"mytable","row":{"_version":1,"id":2,"foo":"world"}}, delta);
+      assert.deepEqual({"op":"insert","table":"mytable","row":{"_version":1,"id":2,"foo":"world"},"pos":1}, delta);
       done();
     });
     //console.log('query', query.constructor, JSON.stringify(query));
