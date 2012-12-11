@@ -1,4 +1,5 @@
-var assert = require("assert")
+var assert = require("assert");
+var Step = require("step");
 
 var session = require('../lib/session.js');
 var database = require('../lib/database.js');
@@ -99,6 +100,36 @@ console.log("AAA", query);
         });
       });
     });   
+  });
+  it('should run a complex realtime script with an update', function(done) {
+    var db = new database.Database();
+    var sess = new session.Session(db);
+    Step(
+      function createTable() {
+        sess.exec('create table customers (id integer primary key auto_increment, name varchar, age integer)', this);
+      },
+      function insertCustomer1(err, message) {
+        assert(!err, err);
+        assert.equal("Table created.", message);
+        sess.exec('insert into customers (name, age) values ("james", 41)', this);
+      },
+      function insertCustomer2(err, message) {
+        assert(!err, err);
+        assert.equal("1 row inserted.", message);
+        sess.exec('insert into customers (name, age) values ("thomas", 19)', this);
+      },
+      function updateCustomer1(err, message) {
+        assert(!err, err);
+        assert.equal("1 row inserted.", message);
+        sess.exec('update customers set age = 42 where name = "thomas"', this);
+      },
+      function end(err, message) {
+        assert(!err, err);
+        assert.equal("1 row updated.", message);
+        done();
+      }
+        
+    );
   });
 });
 
