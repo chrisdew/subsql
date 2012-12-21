@@ -101,9 +101,10 @@ console.log("AAA", query);
       });
     });   
   });
-  it('should run a complex realtime script with an update', function(done) {
+  it('should run an update', function(done) {
     var db = new database.Database();
     var sess = new session.Session(db);
+    var query;
     Step(
       function createTable() {
         sess.exec('create table customers (id integer primary key auto_increment, name varchar, age integer)', this);
@@ -121,12 +122,17 @@ console.log("AAA", query);
       function updateCustomer1(err, message) {
         assert(!err, err);
         assert.equal("1 row inserted.", message);
-        sess.exec('update customers set age = 42 where name = "thomas"', this);
+        sess.exec('update customers set age = 42 where name = "james"', this);
       },
       function end(err, message) {
         assert(!err, err);
         assert.equal("1 row updated.", message);
-        done();
+        //assert(false, "add a push query to this test");
+        query = sess.exec('push * from customers where age >= 20 and age < 50');
+        query.on('init', function(data) {
+          assert.deepEqual([{"_version":2,"name":"james","age":42}], data);
+          done();
+        });
       }
         
     );
