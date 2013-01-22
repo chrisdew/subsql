@@ -94,3 +94,45 @@ function setRawMode (mode) {
     this.wont.echo()
   }
 }
+
+// now setup an express web app
+
+var express = require('express'),
+    fs = require('fs'),
+    //conf = process.conf = require('./conf'),
+    //uuid = require('node-uuid'),
+    app = express();
+    
+    
+// setup express
+app.configure(function(){
+  app.set('view engine', 'ejs');
+  app.set('views'      , __dirname + '/views'         );
+  app.set('partials'   , __dirname + '/views/partials');
+  //app.set('view engine', 'jade');
+  app.use(express.logger());
+  app.use(express.methodOverride());
+  app.use(express.bodyParser());
+  app.use(express.cookieParser());
+  app.use(express.session({ secret: "FIXME: change this to a secret string" }));
+  app.use(app.router);
+});
+
+app.configure('development', function(){
+  app.use(express.static(__dirname + '/public'));
+  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+});
+
+app.configure('production', function(){
+  var oneYear = 31557600000;
+  app.use(express.static(__dirname + '/public', { maxAge: oneYear }));
+  app.use(express.errorHandler());
+});
+
+app.get('/', getIndex);
+function getIndex(req, res) {
+    res.render('index', {} );
+}
+
+
+app.listen(80, "0.0.0.0");

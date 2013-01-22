@@ -131,7 +131,12 @@ console.log("AAA", query);
         query = sess.exec('push * from customers where age >= 20 and age < 50');
         query.on('init', function(data) {
           assert.deepEqual([{"_version":2,"name":"james","age":42}], data);
-          done();
+          query.on('delta', function(delta) {
+            assert.deepEqual({"op":"insert","row":{"_version":2,"name":"thomas","age":20}}, delta);
+                              // the update should produce an insert to the query, as it has only just met the inclusion criteria
+            done();
+          });
+          sess.exec('update customers set age = 20 where name = "thomas"', this);
         });
       }
         
